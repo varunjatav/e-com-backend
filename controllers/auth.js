@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -63,18 +63,30 @@ export const Users = async (req, res) => {
 };
 
 export const sendPasswordReset = async (req,res) => {
-  const data = req.body;
-  console.log(data);
+  const {email,oldpassword,newpassword,cnewpassword} = req.body;
+  console.log(req.body);
+  console.log("reset password email: ",email);
+  console.log("reset password old password: ",oldpassword);
+  console.log("reset password new password: ",newpassword);
+  console.log("reset password create new password: ",cnewpassword);
+ 
   try {
-    const isPasswordValid = await bcrypt.compare(password, data.newpassword);
+    const user = await User.findOne({ email });
+    console.log("user : ",user);
+    const isPasswordValid = await bcrypt.compare(oldpassword, user.password);
     if(isPasswordValid){
-      await sendMail(data);
+      user.password = await bcrypt.hash(newpassword, 10);;
+      console.log(user.password);
+      console.log(user);
+      
+      await sendMail({email,oldpassword,newpassword,cnewpassword});
+      await user.save();
     }else{
       res.status(400).send({message: "Invalid password"})
     }
     
     
-  res.status(200).send(data); 
+  res.status(200).send({email,oldpassword,newpassword,cnewpassword}); 
   } catch (error) {
     res.status(400).send({message: "Error in password reset"})
   }

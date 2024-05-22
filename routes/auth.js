@@ -9,5 +9,6 @@ router.post('/login', login);
 
 router.get('/users', Users);
 router.post('/logout', Logout);
-router.post('/send-password-reset', sendPasswordReset)
+router.post('/send-password-reset', sendPasswordReset);
+// router.get('/send-password-reset', sendPasswordReset)
 export default router;
