@@ -1,4 +1,4 @@
-import mongoose  from 'mongoose';
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
     id: String,
@@ -9,4 +9,6 @@ const productSchema = new mongoose.Schema({
     star: Number,
     category: String,
 });
-export default mongoose.model('Product', productSchema, 'jwellery');
+
+const Product = mongoose.models.Product || mongoose.model('Product', productSchema, 'jwellery');
+export default Product;

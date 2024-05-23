@@ -1,11 +1,10 @@
-import Cart from '../models/cart.js';
-import Product from '../models/product.js';
+import Cart from "../models/cart.js";
+import Product from '../models/jwellery.js';
 import User from '../models/user.js';
-
 // Add item to cart
 export const addToCart = async (req, res) => {
     const { userId, productId, quantity } = req.body;
-
+    // console.log(req.body);
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -21,6 +20,7 @@ export const addToCart = async (req, res) => {
         if (!cart) {
             cart = new Cart({ user: userId, items: [] });
         }
+        // console.log("cart",cart);
 
         const itemIndex = cart.items.findIndex(item => item.product.equals(productId));
         if (itemIndex > -1) {

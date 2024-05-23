@@ -1,13 +1,21 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import { jwtSecret } from "../middleware/auth.js";
-import { blackList } from '../middleware/auth.js';
+import { jwtSecret, refreshtokenSecret } from "../middleware/auth.js";
+import { blackList } from "../middleware/auth.js";
 import { sendMail } from "../mail.js";
+import UserToken from "../models/userToken.js";
+import {validationResult} from "express-validator"
 
 // User signup
+
 export const signup = async (req, res) => {
   const { mobileNumber, email, firstName, lastName, password } = req.body;
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -15,6 +23,7 @@ export const signup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User({
       mobileNumber,
       email,
@@ -22,9 +31,7 @@ export const signup = async (req, res) => {
       lastName,
       password: hashedPassword,
     });
-
     await user.save();
-
     res.status(201).json({ user });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -34,22 +41,34 @@ export const signup = async (req, res) => {
 // User login
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
-
+    console.log(user);
     const token = jwt.sign({ userId: user._id }, jwtSecret, {
       expiresIn: "1h",
     });
+    
+    const refreshToken = jwt.sign({ userId: user._id }, refreshtokenSecret, {
+      expiresIn: "1d",
+    });
+    
 
-    res.status(200).json({ token, userId: user._id });
+    return res.status(200).json({ token, refreshToken, userId: user._id });
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -58,47 +77,48 @@ export const login = async (req, res) => {
 // Users list
 export const Users = async (req, res) => {
   const users = await User.find({});
-  res.status(200).json(users)
+  res.status(200).json(users);
   console.log(users);
 };
 
-export const sendPasswordReset = async (req,res) => {
-  const {email,oldpassword,newpassword,cnewpassword} = req.body;
+export const sendPasswordReset = async (req, res) => {
+  const { email, oldpassword, newpassword, cnewpassword } = req.body;
   console.log(req.body);
-  console.log("reset password email: ",email);
-  console.log("reset password old password: ",oldpassword);
-  console.log("reset password new password: ",newpassword);
-  console.log("reset password create new password: ",cnewpassword);
- 
+  console.log("reset password email: ", email);
+  console.log("reset password old password: ", oldpassword);
+  console.log("reset password new password: ", newpassword);
+  console.log("reset password create new password: ", cnewpassword);
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const user = await User.findOne({ email });
-    console.log("user : ",user);
+    console.log("user : ", user);
     const isPasswordValid = await bcrypt.compare(oldpassword, user.password);
-    if(isPasswordValid){
-      user.password = await bcrypt.hash(newpassword, 10);;
+    if (isPasswordValid) {
+      user.password = await bcrypt.hash(newpassword, 10);
       console.log(user.password);
       console.log(user);
-      
-      await sendMail({email,oldpassword,newpassword,cnewpassword});
+
+      await sendMail({ email, oldpassword, newpassword, cnewpassword });
       await user.save();
-    }else{
-      res.status(400).send({message: "Invalid password"})
+    } else {
+      res.status(400).send({ message: "Invalid password" });
     }
-    
-    
-  res.status(200).send({email,oldpassword,newpassword,cnewpassword}); 
+
+    res.status(200).send({ email, oldpassword, newpassword, cnewpassword });
   } catch (error) {
-    res.status(400).send({message: "Error in password reset"})
+    res.status(400).send({ message: "Error in password reset" });
   }
- 
-}
+};
 
 // Users logout
 export const Logout = async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token = req.headers.authorization?.split(" ")[1];
   if (token) {
     blackList.push(token);
-    return res.status(200).send('Logged Out');
+    return res.status(200).send("Logged Out");
   }
-  res.status(400).json({ message: 'No token provided' });
+  res.status(400).json({ message: "No token provided" });
 };
