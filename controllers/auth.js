@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { jwtSecret, refreshtokenSecret } from "../middleware/auth.js";
 import { blackList } from "../middleware/auth.js";
-import { sendMail } from "../mail.js";
+import { sendPasswordResetMail, sendSignUpEmail } from "../mail.js";
 import UserToken from "../models/userToken.js";
 import {validationResult} from "express-validator"
 
@@ -31,6 +31,7 @@ export const signup = async (req, res) => {
       lastName,
       password: hashedPassword,
     });
+    await sendSignUpEmail(email);
     await user.save();
     res.status(201).json({ user });
   } catch (error) {
@@ -101,7 +102,7 @@ export const sendPasswordReset = async (req, res) => {
       console.log(user.password);
       console.log(user);
 
-      await sendMail({ email, oldpassword, newpassword, cnewpassword });
+      await sendPasswordResetMail({ email, oldpassword, newpassword, cnewpassword });
       await user.save();
     } else {
       res.status(400).send({ message: "Invalid password" });

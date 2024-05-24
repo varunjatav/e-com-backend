@@ -6,7 +6,8 @@ import Product from '../models/jwellery.js';
 export const fetchProducts = async (req,res) => {
   try {
     const products = await Product.find();
-    // console.log('Fetched products:', products); 
+    console.log('Fetched products:', products);
+  
     res.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -27,3 +28,53 @@ export const fetchProductsByID = async (req, res) => {
     }
 };
 
+
+
+export const fetchProductsByCategory = async (req,res) => {
+  try {
+   
+    console.log("request query :",req.query);
+    const products = await Product.find({
+      category: req.query.category,
+    });
+    console.log('Fetched products:', products);
+  
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+export const fetchProductsByPrice = async(req,res) => {
+  try {
+    console.log("request query from price :",req.query.price_gte);
+    const products = await Product.find({
+      price: { $gte: req.query.price_gte , $lte: req.query.price_lte }
+    });
+    console.log('Fetched products:', products);
+  
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export const fetchProductByPriceAndCategory = async(req, res) => { 
+  try {
+    console.log("request query from price :",req.query.price_gte);
+    const products = await Product.find({
+      category: req.query.category,
+      price: { $gte: req.query.price_gte , $lte: req.query.price_lte }
+    });
+    console.log('Fetched products:', products);
+  
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: error.message });
+  }
+
+}
