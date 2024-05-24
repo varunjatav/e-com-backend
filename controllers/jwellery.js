@@ -6,8 +6,6 @@ import Product from '../models/jwellery.js';
 export const fetchProducts = async (req,res) => {
   try {
     const products = await Product.find();
-    console.log('Fetched products:', products);
-  
     res.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);

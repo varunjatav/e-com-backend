@@ -3,8 +3,12 @@ import Product from '../models/jwellery.js';
 import User from '../models/user.js';
 // Add item to cart
 export const addToCart = async (req, res) => {
-    const { userId, productId, quantity } = req.body;
-    // console.log(req.body);
+    
+    const { productId, quantity } = req.body;
+    const userId = req.userId;
+    console.log("user Id from auth request: ",req.userId);
+   
+   
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -38,7 +42,7 @@ export const addToCart = async (req, res) => {
 
 // View cart
 export const viewCart = async (req, res) => {
-    const { userId } = req.query;
+    const userId = req.userId;
 
     try {
         const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -54,8 +58,8 @@ export const viewCart = async (req, res) => {
 
 // Remove item from cart
 export const removeFromCart = async (req, res) => {
-    const { userId, productId } = req.body;
-
+    const { productId } = req.body;
+    const userId = req.userId;
     try {
         const cart = await Cart.findOne({ user: userId });
         if (!cart) {

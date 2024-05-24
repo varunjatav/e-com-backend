@@ -1,13 +1,27 @@
 import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
-    id: String,
-    image: String,
-    price: Number,
-    name: String,
-    shipping: String,
-    star: Number,
-    category: String,
+    id: {
+        type:String, required: true,
+    },
+    image: {
+        type:String, required: true,
+    },
+    price: {
+        type:Number, required: true,
+    },
+    name: {
+        type:String, required: true,
+    },
+    shipping: {
+        type:String, required: true,
+    },
+    star: {
+        type:Number, required: true,
+    },
+    category: {
+        type:String, required: true,
+    },
 });
 
 const Product = mongoose.models.Product || mongoose.model('Product', productSchema, 'jwellery');
