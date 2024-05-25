@@ -8,6 +8,6 @@
     router.post('/add', auth, addToCart);
     // router.get('/add', auth, addToCart);
     router.get('/', auth, viewCart);
-    router.post('/delete', auth, removeFromCart);
+    router.delete('/delete/:productId', auth, removeFromCart);
 
     export default router;

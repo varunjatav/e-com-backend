@@ -3,8 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { jwtSecret, refreshtokenSecret } from "../middleware/auth.js";
 import { blackList } from "../middleware/auth.js";
-import { sendPasswordResetMail, sendSignUpEmail } from "../mail.js";
-import UserToken from "../models/userToken.js";
+import { sendPasswordResetMail, sendSignUpEmail } from "../mail.js";;
 import {validationResult} from "express-validator"
 
 // User signup
@@ -59,11 +58,11 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
     // console.log(user);
-    const token = jwt.sign({ userId: user._id }, jwtSecret, {
+    const token = jwt.sign({ userId: user._id },  process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     
-    const refreshToken = jwt.sign({ userId: user._id }, refreshtokenSecret, {
+    const refreshToken = jwt.sign({ userId: user._id },  process.env.REFRESH_JWT_SECRET, {
       expiresIn: "1d",
     });
     

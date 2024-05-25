@@ -77,8 +77,11 @@ export const viewCart = async (req, res) => {
 
 // Remove item from cart
 export const removeFromCart = async (req, res) => {
-    const { productId } = req.body;
+    console.log('Request Param:', req.params);
+    console.log('Request Body:', req.body);
+    const { productId } = req.params;
     const userId = req.userId;
+    console.log("userId: ", userId);
     try {
         const cart = await Cart.findOne({ user: userId });
         if (!cart) {
@@ -94,6 +97,7 @@ export const removeFromCart = async (req, res) => {
 
         res.status(404).json({ message: 'Product not found in cart' });
     } catch (error) {
+        console.error('Error removing item from cart:', error);
         res.status(500).json({ message: error.message });
     }
 };

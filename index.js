@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import DBconnection from './db.js';
 import authRouter from './routes/auth.js';
 import cartRouter from './routes/cart.js';
-import userTokenRouter from "./routes/userToken.js";
+
 // import { blackList } from './controllers/auth.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -22,6 +22,6 @@ DBconnection();
 server.use("/jwellery", jwelleryRouter);
 server.use("/cart", cartRouter);
 server.use("/auth", authRouter);
-server.use('/user-token', userTokenRouter)
+
 
 server.listen(PORT, () => console.log(`server is running on ${PORT}`));
