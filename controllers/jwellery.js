@@ -31,11 +31,11 @@ export const fetchProductsByID = async (req, res) => {
 export const fetchProductsByCategory = async (req,res) => {
   try {
    
-    console.log("request query :",req.query);
+    // console.log("request query :",req.query);
     const products = await Product.find({
       category: req.query.category,
     });
-    console.log('Fetched products:', products);
+    // console.log('Fetched products:', products);
   
     res.json(products);
   } catch (error) {
@@ -47,11 +47,11 @@ export const fetchProductsByCategory = async (req,res) => {
 
 export const fetchProductsByPrice = async(req,res) => {
   try {
-    console.log("request query from price :",req.query.price_gte);
+    // console.log("request query from price :",req.query.price_gte);
     const products = await Product.find({
       price: { $gte: req.query.price_gte , $lte: req.query.price_lte }
     });
-    console.log('Fetched products:', products);
+    // console.log('Fetched products:', products);
   
     res.json(products);
   } catch (error) {
@@ -62,12 +62,12 @@ export const fetchProductsByPrice = async(req,res) => {
 
 export const fetchProductByPriceAndCategory = async(req, res) => { 
   try {
-    console.log("request query from price :",req.query.price_gte);
+    // console.log("request query from price :",req.query.price_gte);
     const products = await Product.find({
       category: req.query.category,
       price: { $gte: req.query.price_gte , $lte: req.query.price_lte }
     });
-    console.log('Fetched products:', products);
+    // console.log('Fetched products:', products);
   
     res.json(products);
   } catch (error) {

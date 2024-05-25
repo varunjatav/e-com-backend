@@ -22,7 +22,7 @@
             // console.log("token",token);
             // console.log("jwtSecret",jwtSecret);
             const verify = jwt.verify(token, jwtSecret);
-            console.log("after decode");
+            console.log("after verify");
             console.log(verify);
             req.userId = verify.userId;
             console.log("after",req.userId);
