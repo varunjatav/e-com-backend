@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import { jwtSecret, refreshtokenSecret } from "../middleware/auth.js";
 import { blackList } from "../middleware/auth.js";
 import { sendPasswordResetMail, sendSignUpEmail } from "../mail.js";;
 import {validationResult} from "express-validator"
