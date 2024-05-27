@@ -46,7 +46,7 @@ export const login = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
-    console.log("user: ",user);
+    // console.log("user: ",user);
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -82,11 +82,6 @@ export const Users = async (req, res) => {
 
 export const sendPasswordReset = async (req, res) => {
   const { email, oldpassword, newpassword, cnewpassword } = req.body;
-  console.log(req.body);
-  // console.log("reset password email: ", email);
-  // console.log("reset password old password: ", oldpassword);
-  // console.log("reset password new password: ", newpassword);
-  // console.log("reset password create new password: ", cnewpassword);
   const errors = validationResult(req);
   if(!errors.isEmpty()){
     return res.status(400).json({ errors: errors.array() });
