@@ -8,7 +8,7 @@
        
         const token = req.headers.authorization?.split(' ')?.[1];
        
-        console.log("token from auth middleware",token);
+        // console.log("token from auth middleware",token);
         if (!token) {
             return res.status(401).json({ message: 'No token provided' });
         }
@@ -21,7 +21,7 @@
         try {
             const verify = jwt.verify(token, process.env.JWT_SECRET);
             console.log("after verify");
-            console.log(verify);
+            // console.log(verify);
             req.userId = verify.userId;
             console.log("after",req.userId);
             next();

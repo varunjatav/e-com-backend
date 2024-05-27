@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import DBconnection from './db.js';
 import authRouter from './routes/auth.js';
 import cartRouter from './routes/cart.js';
+import wishListRouter from "./routes/wishlist.js";
 
 // import { blackList } from './controllers/auth.js';
 dotenv.config();
@@ -22,6 +23,6 @@ DBconnection();
 server.use("/jwellery", jwelleryRouter);
 server.use("/cart", cartRouter);
 server.use("/auth", authRouter);
-
+server.use('/wishlist', wishListRouter)
 
 server.listen(PORT, () => console.log(`server is running on ${PORT}`));

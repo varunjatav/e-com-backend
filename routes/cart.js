@@ -6,7 +6,6 @@
     const router = express.Router();
 
     router.post('/add', auth, addToCart);
-    // router.get('/add', auth, addToCart);
     router.get('/', auth, viewCart);
     router.delete('/delete/:productId', auth, removeFromCart);
     router.delete('/decrement/:productId', auth, decrementCart);
