@@ -17,8 +17,7 @@
             return res.status(401).json({ message: 'Token is invalid' });
         }
 
-        const cookies =  res.cookie("jwtToken", token);
-        console.log(cookies);
+       
         try {
             const verify = jwt.verify(token, process.env.JWT_SECRET);
             console.log("after verify");
