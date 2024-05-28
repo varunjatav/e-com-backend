@@ -4,11 +4,11 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post('/add',addToWishlist);
+router.post('/add',auth,addToWishlist);
 
 router.get('/', auth, viewWishlist);
 
-router.delete('/delete', auth, removeFromWishlist);
+router.delete('/delete/:productId', auth, removeFromWishlist);
 
 
 export default router;
