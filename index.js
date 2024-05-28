@@ -7,15 +7,29 @@ import DBconnection from './db.js';
 import authRouter from './routes/auth.js';
 import cartRouter from './routes/cart.js';
 import wishListRouter from "./routes/wishlist.js";
+import cookieParser from 'cookie-parser';
 
 // import { blackList } from './controllers/auth.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const server = express();
 
-server.use(cors());
+const allowedOrigins = ['http://localhost:3000']; // Add your frontend URL here
+
+server.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+}));
+
 // middleware
 server.use(bodyParser.json());
+server.use(cookieParser());
 // Database connection function
 DBconnection();
 

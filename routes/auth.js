@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.post('/signup',signUpValidation, signup);
 router.post('/login', loginValidation, login);
-
 router.get('/users', Users);
 router.post('/logout', Logout);
 router.post('/send-password-reset', sendPasswordResetValidation, sendPasswordReset);

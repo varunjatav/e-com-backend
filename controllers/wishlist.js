@@ -9,7 +9,7 @@ export const addToWishlist = async (req, res) => {
    
    console.log("request body from wishlist",req.body);
     //  // Convert request body object to an array
-     const  {productId}  = req.body;
+    const { _id: productId } = req.body;
      console.log("productId from wishList: ", productId);
     try {
         const user = await User.findById(userId);
@@ -71,6 +71,7 @@ export const removeFromWishlist = async (req, res) => {
         }
 
         const itemIndex = wishlist.items.findIndex(item => item.product.equals(productId));
+        // console.log(itemIndex);
         if (itemIndex > -1) {
             wishlist.items.splice(itemIndex, 1);
             await wishlist.save();
