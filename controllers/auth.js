@@ -10,6 +10,7 @@ import {validationResult} from "express-validator"
 export const signup = async (req, res) => {
   const { mobileNumber, email, firstName, lastName, password } = req.body;
 
+
   const errors = validationResult(req);
   if(!errors.isEmpty()){
     return res.status(400).json({ errors: errors.array() });
@@ -46,7 +47,8 @@ export const login = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
-    // console.log("user: ",user);
+    // console.log("user from login: ",user);
+
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -64,14 +66,14 @@ export const login = async (req, res) => {
     const refreshToken = jwt.sign({ userId: user._id },  process.env.REFRESH_JWT_SECRET, {
       expiresIn: "1d",
     });
-    
-
+  
     return res.status(200).json({ token, refreshToken, userId: user._id });
-    
+
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
+  }  
 };
+
 
 // Users list
 export const Users = async (req, res) => {
@@ -79,6 +81,8 @@ export const Users = async (req, res) => {
   res.status(200).json(users);
   console.log(users);
 };
+
+
 
 export const sendPasswordReset = async (req, res) => {
   const { email, oldpassword, newpassword, cnewpassword } = req.body;
