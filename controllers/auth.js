@@ -116,3 +116,40 @@ export const Logout = async (req, res) => {
   }
   res.status(400).json({ message: "No token provided" });
 };
+
+
+// refresh token auth
+// In your auth.js controller
+
+// Refresh Token endpoint
+export const refreshToken = async (req, res) => {
+  const refreshToken = req.body.refreshToken;
+
+  try {
+    // Verify the refresh token
+    const payload = jwt.verify(refreshToken, process.env.REFRESH_JWT_SECRET);
+
+    // Check if the refresh token is blacklisted (optional step)
+    if (blackList.includes(refreshToken)) {
+      return res.status(401).json({ message: "Refresh token blacklisted" });
+    }
+
+    // Generate a new access token
+    const newAccessToken = jwt.sign({ userId: payload.userId }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    // Send the new access token in the response
+    res.status(200).json({ token: newAccessToken });
+
+  } catch (error) {
+    // Handle invalid refresh token or other errors
+    console.error("Error refreshing token:", error);
+    res.status(401).json({ message: "Invalid refresh token" });
+  }
+};
+
+
+
+
+
