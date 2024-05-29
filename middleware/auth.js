@@ -1,7 +1,4 @@
     import jwt from 'jsonwebtoken';
-    import crypto  from 'crypto';
-    export const jwtSecret = crypto.randomBytes(64).toString('hex');
-    export const refreshtokenSecret = crypto.randomBytes(64).toString('hex');
     export const blackList = [];
 
     const auth = (req, res, next) => {
@@ -19,10 +16,10 @@
        
         try {
             const verify = jwt.verify(token, process.env.JWT_SECRET);
-            console.log("after verify");
+            // console.log("after verify");
             // console.log(verify);
             req.userId = verify.userId;
-            console.log("after",req.userId);
+            // console.log("after",req.userId);
             next();
         } catch (error) {
             res.status(401).json({ message: 'Invalid token' });

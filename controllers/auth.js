@@ -79,7 +79,7 @@ export const login = async (req, res) => {
 export const Users = async (req, res) => {
   const users = await User.find({});
   res.status(200).json(users);
-  console.log(users);
+  // console.log(users);
 };
 
 
@@ -92,12 +92,12 @@ export const sendPasswordReset = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
-    console.log("user : ", user);
+    // console.log("user : ", user);
     const isPasswordValid = await bcrypt.compare(oldpassword, user.password);
     if (isPasswordValid) {
       user.password = await bcrypt.hash(newpassword, 10);
-      console.log(user.password);
-      console.log(user);
+      // console.log(user.password);
+      // console.log(user);
 
       await sendPasswordResetMail({ email, oldpassword, newpassword, cnewpassword });
       await user.save();
