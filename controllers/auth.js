@@ -10,7 +10,7 @@ import {validationResult} from "express-validator"
 export const signup = async (req, res) => {
   const { mobileNumber, email, firstName, lastName, password } = req.body;
 
-
+  console.log(req.body);
   const errors = validationResult(req);
   if(!errors.isEmpty()){
     return res.status(400).json({ errors: errors.array() });
@@ -30,10 +30,12 @@ export const signup = async (req, res) => {
       lastName,
       password: hashedPassword,
     });
+    console.log("user from sign up: ",user);
     await sendSignUpEmail(email);
     await user.save();
     res.status(201).json({ user });
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 };
