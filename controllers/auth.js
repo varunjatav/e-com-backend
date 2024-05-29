@@ -47,7 +47,7 @@ export const login = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
-    // console.log("user from login: ",user);
+    console.log("user from login: ",user);
 
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -67,7 +67,7 @@ export const login = async (req, res) => {
       expiresIn: "1d",
     });
   
-    return res.status(200).json({ token, refreshToken, userId: user._id });
+    return res.status(200).json({ token, refreshToken, userId: user._id, userRole: user.role });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -82,6 +82,12 @@ export const Users = async (req, res) => {
   // console.log(users);
 };
 
+// single user 
+export const SingleUser = async(req, res) => {
+  const {userId} = req.params;
+  const singleUser = await User.findById(userId);
+  res.status(200).json(singleUser);
+};
 
 
 export const sendPasswordReset = async (req, res) => {
