@@ -1,11 +1,12 @@
 import express  from 'express';
-
-import { fetchProductByPriceAndCategory, fetchProducts, fetchProductsByCategory, fetchProductsByID, fetchProductsByPrice } from '../controllers/jwellery.js';
+import multer from "multer";
+const upload = multer({dest : 'uploads/'})
+import { AddProduct, fetchProductByPriceAndCategory, fetchProducts, fetchProductsByCategory, fetchProductsByID, fetchProductsByPrice } from '../controllers/jwellery.js';
 const router = express.Router();
 
 // Fetch All Products
 router.get("/", fetchProducts);
-
+router.post("/add", upload.single('file'), AddProduct)
 
 // Fetch products by Category
 router.get("/q/cat", fetchProductsByCategory);

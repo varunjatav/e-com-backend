@@ -1,5 +1,28 @@
-
 import Product from '../models/jwellery.js';
+
+export const AddProduct = async (req,res) => {
+  try {
+    // const product = r
+    const file = req.file;
+    const {name , price, category, rating, shipping } = req.body
+    console.log(req.file);
+    console.log(req.body);
+
+    const fileLocation = `uploads/${file.filename}`;
+    const product = new Product({
+      image: fileLocation,
+      price: price,
+      name: name,
+      shipping: shipping,
+      star: rating,
+      category: category
+    });
+ await product.save();
+res.status(201).json({message:"data created Successfully" , location: fileLocation});
+  } catch (error) {
+    
+  }
+}
 
 
 // Fetch All Products
