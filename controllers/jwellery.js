@@ -1,101 +1,102 @@
-import Product from '../models/jwellery.js';
+import Product from "../models/jwellery.js";
 
-export const AddProduct = async (req,res) => {
+export const AddProduct = async (req, res) => {
   try {
-    // const product = r
-    const file = req.file;
-    const {name , price, category, rating, shipping } = req.body
-    console.log(req.file);
-    console.log(req.body);
+    const { name, price, category, rating, shipping } = req.body;
+  
+    if (!req.file) {
+      return res.status(400).json({ message: 'Image file is required' });
+    }
 
-    const fileLocation = `uploads/${file.filename}`;
+    const newImage = {
+      data: req.file.buffer,
+      contentType: req.file.mimeType
+    }
+
     const product = new Product({
-      image: fileLocation,
-      price: price,
-      name: name,
-      shipping: shipping,
-      star: rating,
-      category: category
+      image: newImage,
+      price: Number(price),
+      name,
+      shipping,
+      star: Number(rating),
+      category,
     });
- await product.save();
-res.status(201).json({message:"data created Successfully" , location: fileLocation});
-  } catch (error) {
-    
-  }
-}
 
+    await product.save();
+    res.status(201).json({ message: "Product created successfully", product });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  } 
+  
+};
 
 // Fetch All Products
-export const fetchProducts = async (req,res) => {
+export const fetchProducts = async (req, res) => {
+  // var newProduct
   try {
-    const products = await Product.find();
+    const products = await Product.find({});
     res.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ message: err.message });
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: error.message });
   }
-}
+};
 
 // Fetch a single product by ID
 export const fetchProductsByID = async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id);
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-        res.json(product);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-
-
-export const fetchProductsByCategory = async (req,res) => {
+export const fetchProductsByCategory = async (req, res) => {
   try {
-   
     // console.log("request query :",req.query);
     const products = await Product.find({
       category: req.query.category,
     });
     // console.log('Fetched products:', products);
-  
+
     res.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     res.status(500).json({ message: error.message });
   }
-}
+};
 
-
-export const fetchProductsByPrice = async(req,res) => {
+export const fetchProductsByPrice = async (req, res) => {
   try {
     // console.log("request query from price :",req.query.price_gte);
     const products = await Product.find({
-      price: { $gte: req.query.price_gte , $lte: req.query.price_lte }
+      price: { $gte: req.query.price_gte, $lte: req.query.price_lte },
     });
     // console.log('Fetched products:', products);
-  
+
     res.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     res.status(500).json({ message: error.message });
   }
-}
+};
 
-export const fetchProductByPriceAndCategory = async(req, res) => { 
+export const fetchProductByPriceAndCategory = async (req, res) => {
   try {
     // console.log("request query from price :",req.query.price_gte);
     const products = await Product.find({
       category: req.query.category,
-      price: { $gte: req.query.price_gte , $lte: req.query.price_lte }
+      price: { $gte: req.query.price_gte, $lte: req.query.price_lte },
     });
     // console.log('Fetched products:', products);
-  
+
     res.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     res.status(500).json({ message: error.message });
   }
-
-}
+};

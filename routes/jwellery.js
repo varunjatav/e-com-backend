@@ -1,11 +1,23 @@
 import express  from 'express';
 import multer from "multer";
-const upload = multer({dest : 'uploads/'})
 import { AddProduct, fetchProductByPriceAndCategory, fetchProducts, fetchProductsByCategory, fetchProductsByID, fetchProductsByPrice } from '../controllers/jwellery.js';
 const router = express.Router();
 
+
+// var storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, 'uploads')
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.fieldname + '-' + Date.now())
+//     }
+//   })
+
+var storage = multer.memoryStorage();
+var upload = multer({ storage: storage })
 // Fetch All Products
 router.get("/", fetchProducts);
+// Add product
 router.post("/add", upload.single('file'), AddProduct)
 
 // Fetch products by Category
