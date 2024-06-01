@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, login, Users, Logout, sendPasswordReset, refreshToken, SingleUser } from '../controllers/auth.js';
+import { signup, login, Users, Logout, sendPasswordReset, refreshToken, SingleUser, searchUsersByName } from '../controllers/auth.js';
 import { loginValidation, sendPasswordResetValidation, signUpValidation } from '../middleware/validation.js';
 
 const router = express.Router();
@@ -8,6 +8,7 @@ router.post('/signup',signUpValidation, signup);
 
 router.post('/login', loginValidation, login);
 router.get('/users', Users);
+router.get("/users/q", searchUsersByName)
 router.get("/singleuser/:userId", SingleUser)
 router.post('/logout', Logout);
 router.post('/send-password-reset', sendPasswordResetValidation, sendPasswordReset);

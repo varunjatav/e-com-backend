@@ -100,3 +100,30 @@ export const fetchProductByPriceAndCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// delete products
+
+export const deleteProduct = async(req,res) => {
+
+  try {
+    const productId = req.params.productId;
+    if(!productId){
+      res.status(404).json({ message:"product Id not found"});
+    }
+
+    const product = await Product.findById(productId);
+    if(!product){
+      res.status(404).json({ message:"product not found"});
+    }
+    
+    await Product.findByIdAndDelete(productId);
+    res.status(200).json({ message:"product removed successfully"});
+  } catch (error) {
+    console.log("error: ", error);
+    res.status(500).json({ message: error.message });
+  }
+ 
+
+
+}
