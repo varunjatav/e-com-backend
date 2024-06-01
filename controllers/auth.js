@@ -26,8 +26,8 @@ export const signup = async (req, res) => {
     const user = new User({
       mobileNumber,
       email,
-      firstName,
-      lastName,
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
       password: hashedPassword,
     });
     console.log("user from sign up: ",user);
@@ -88,13 +88,12 @@ export const Users = async (req, res) => {
  export const searchUsersByName = async (req, res) => {
   try {
     const userName = req.query.userName;
-    console.log(userName);
     if(!userName) {
       res.status(404).json({ message:"user name not found"});
     }
     const user = await User.findOne(
       {
-        firstName: userName,
+        firstName: userName.toLowerCase(),
       }
     );
   
