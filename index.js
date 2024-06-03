@@ -23,7 +23,7 @@ server.use(bodyParser.json());
 DBconnection();
 
 // routers
-server.use("/jwellery", jwelleryRouter);
+server.use("/products", jwelleryRouter);
 server.use("/cart", cartRouter);
 server.use("/auth", authRouter);
 server.use('/wishlist', wishListRouter);

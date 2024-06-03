@@ -13,11 +13,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  shipping: {
+  description: {
     type: String,
     required: true,
   },
-  star: {
+  quantity: {
     type: Number,
     required: true,
   },
@@ -29,5 +29,5 @@ const productSchema = new mongoose.Schema({
 
 const Product =
   mongoose.models.Product ||
-  mongoose.model("Product", productSchema, "jwellery");
+  mongoose.model("Product", productSchema, "products");
 export default Product;

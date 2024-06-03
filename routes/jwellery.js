@@ -1,6 +1,6 @@
 import express  from 'express';
 import multer from "multer";
-import { AddProduct, deleteProduct, fetchProductByPriceAndCategory, fetchProducts, fetchProductsByCategory, fetchProductsByID, fetchProductsByPrice } from '../controllers/jwellery.js';
+import { AddProduct, deleteProduct, fetchProductByPriceAndCategory, fetchProducts, fetchProductsByCategory, fetchProductsByID, fetchProductsByPrice, updateProduct } from '../controllers/jwellery.js';
 const router = express.Router();
 
 
@@ -26,4 +26,8 @@ router.get('/:id',fetchProductsByID);
 
 // Delete a product
 router.delete('/delete/:productId', deleteProduct);
+
+// Update a Product
+
+router.patch('/update/:productId', updateProduct);
 export default router;

@@ -2,10 +2,14 @@ import Product from "../models/jwellery.js";
 
 export const AddProduct = async (req, res) => {
   try {
-    const { name, price, category, rating, shipping } = req.body;
+    const { name, price, category, quantity, description } = req.body;
   
     if (!req.file) {
       return res.status(400).json({ message: 'Image file is required' });
+    }
+    const existingProduct = await Product.findOne({name});
+    if(existingProduct){
+         return res.status(400).json({ error: 'Product already exists'})
     }
 
     const newImage = {
@@ -17,8 +21,8 @@ export const AddProduct = async (req, res) => {
       image: newImage,
       price: Number(price),
       name,
-      shipping,
-      star: Number(rating),
+      description,
+      quantity: Number(quantity),
       category,
     });
 
@@ -123,7 +127,24 @@ export const deleteProduct = async(req,res) => {
     console.log("error: ", error);
     res.status(500).json({ message: error.message });
   }
- 
 
+}
 
+export const updateProduct = async(req,res) => {
+  try {
+    const { productId } = req.params;
+    console.log(productId);
+    if(!productId){
+      res.status(404).json({ message:"product Id not found"});
+    }
+    const product = await Product.findById(productId);
+    if(!product){
+      res.status(404).json({ message:"product not found"});
+    }
+    const updateProduct = await Product.findByIdAndUpdate(productId);
+    console.log(updateProduct);
+    res.status(200).json({ message: updateProduct });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
