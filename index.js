@@ -1,5 +1,5 @@
 import express from 'express';
-import jwelleryRouter from "./routes/jwellery.js";
+import productRouter from "./routes/products.js";
 import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -23,7 +23,7 @@ server.use(bodyParser.json());
 DBconnection();
 
 // routers
-server.use("/products", jwelleryRouter);
+server.use("/products", productRouter);
 server.use("/cart", cartRouter);
 server.use("/auth", authRouter);
 server.use('/wishlist', wishListRouter);
